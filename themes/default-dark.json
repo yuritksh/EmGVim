@@ -1,0 +1,10 @@
+{
+    "themeName": "Default Dark",
+    "background": "black",
+    "foreground": "white",
+    "font": "Consolas",
+    "fontSize": 12,
+    "keyword": "blue",
+    "string": "green",
+    "comment": "gray"
+}

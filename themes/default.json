@@ -1,4 +1,5 @@
 {
+    "themeName": "Default",
     "background": "white",
     "foreground": "black",
     "font": "Consolas",

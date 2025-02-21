@@ -1,0 +1,10 @@
+{
+    "themeName": "Solarized Dark",
+    "background": "#002b36",
+    "foreground": "#839496",
+    "font": "Consolas",
+    "fontSize": 12,
+    "keyword": "#268bd2",
+    "string": "#2aa198",
+    "comment": "#586e75"
+}

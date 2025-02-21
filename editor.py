@@ -2,11 +2,18 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 import re
 import json
+import os
 
-with open('config/theme.json', 'r') as file:
-    theme = json.load(file)
+def load_theme(theme_path):
+    global theme
+    with open(theme_path, 'r') as file:
+        theme = json.load(file)
+    text_area.config(background=theme['background'], foreground=theme['foreground'], font=(theme['font'], theme['fontSize']))
+    text_area.tag_configure("keyword", foreground=theme['keyword'], font=(theme['font'], theme['fontSize'], "bold"))
+    text_area.tag_configure("string", foreground=theme['string'], font=(theme['font'], theme['fontSize'], "italic"))
+    text_area.tag_configure("comment", foreground=theme['comment'], font=(theme['font'], theme['fontSize'], "italic"))
+    apply_syntax_highlighting()
 
-# Função para abrir um arquivo
 def open_file():
     file_path = filedialog.askopenfilename(defaultextension=".txt",
                                            filetypes=[("Text Files", "*.txt"),
@@ -18,12 +25,9 @@ def open_file():
                 text_area.delete(1.0, tk.END)  # Limpa o editor antes de abrir um novo arquivo
                 text_area.insert(tk.END, file.read())  # Insere o conteúdo do arquivo no editor
                 apply_syntax_highlighting()
-        # except UnicodeDecodeError as e:
-        #     messagebox.showerror("Erro na codificação", f"Erro ao abrir arquivo: {e}")
         except Exception as e:
             messagebox.showerror("Erro", f"Não foi possível abrir o arquivo: {e}")
 
-# Função para salvar um arquivo
 def save_file():
     file_path = filedialog.asksaveasfilename(defaultextension=".txt",
                                              filetypes=[("Text Files", "*.txt"),
@@ -69,7 +73,6 @@ def apply_syntax_highlighting(event=None):
         end_index = f"1.0+{end}c"
         text_area.tag_add("comment", start_index, end_index)
 
-# Função para sair do editor
 def quit_editor():
     if messagebox.askokcancel("Sair", "Você tem certeza que quer sair?"):
         root.destroy()
@@ -90,14 +93,20 @@ file_menu.add_command(label="Salvar", command=save_file)
 file_menu.add_separator()
 file_menu.add_command(label="Sair", command=quit_editor)
 
+theme_menu = tk.Menu(menu_bar, tearoff=0)
+menu_bar.add_cascade(label="Tema", menu=theme_menu)
+
+theme_dir = 'themes'
+for theme_file in os.listdir(theme_dir):
+    if theme_file.endswith('.json'):
+        theme_path = os.path.join(theme_dir, theme_file)
+        theme_menu.add_command(label=theme_file, command=lambda path=theme_path: load_theme(path))
+
 # Criando a área de texto
-text_area = tk.Text(root, undo=True, background=theme['background'], foreground=theme['foreground'], font=(theme['font'], theme['fontSize']))
+text_area = tk.Text(root, undo=True)
 text_area.pack(expand=1, fill='both')
 
-# Configurando tags para syntax highlighting
-text_area.tag_configure("keyword", foreground=theme['keyword'], font=(theme['font'], theme['fontSize'], "bold"))
-text_area.tag_configure("string", foreground=theme['string'], font=(theme['font'], theme['fontSize'], "italic"))
-text_area.tag_configure("comment", foreground=theme['comment'], font=(theme['font'], theme['fontSize'], "italic"))
+load_theme('themes/default.json')
 
 # Vinculando evento de modificação de texto para aplicar syntax highlighting
 text_area.bind("<KeyRelease>", apply_syntax_highlighting)
