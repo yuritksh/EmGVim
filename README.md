@@ -1,4 +1,4 @@
 # EmGVim
 Ema Gold Vi Improved
 
-Edit your theme in `config/theme.json`
+Edit and make your own themes in `themes/` folder. 
