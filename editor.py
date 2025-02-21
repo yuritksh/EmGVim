@@ -1,6 +1,10 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
 import re
+import json
+
+with open('config/theme.json', 'r') as file:
+    theme = json.load(file)
 
 # Função para abrir um arquivo
 def open_file():
@@ -87,13 +91,13 @@ file_menu.add_separator()
 file_menu.add_command(label="Sair", command=quit_editor)
 
 # Criando a área de texto
-text_area = tk.Text(root, undo=True)
+text_area = tk.Text(root, undo=True, background=theme['background'], foreground=theme['foreground'], font=(theme['font'], theme['fontSize']))
 text_area.pack(expand=1, fill='both')
 
 # Configurando tags para syntax highlighting
-text_area.tag_configure("keyword", foreground="blue", font=("Consolas", 12, "bold"))
-text_area.tag_configure("string", foreground="green", font=("Consolas", 12, "italic"))
-text_area.tag_configure("comment", foreground="gray", font=("Consolas", 12, "italic"))
+text_area.tag_configure("keyword", foreground=theme['keyword'], font=(theme['font'], theme['fontSize'], "bold"))
+text_area.tag_configure("string", foreground=theme['string'], font=(theme['font'], theme['fontSize'], "italic"))
+text_area.tag_configure("comment", foreground=theme['comment'], font=(theme['font'], theme['fontSize'], "italic"))
 
 # Vinculando evento de modificação de texto para aplicar syntax highlighting
 text_area.bind("<KeyRelease>", apply_syntax_highlighting)

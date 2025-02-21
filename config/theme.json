@@ -1,0 +1,9 @@
+{
+    "background": "white",
+    "foreground": "black",
+    "font": "Consolas",
+    "fontSize": 12,
+    "keyword": "blue",
+    "string": "green",
+    "comment": "gray"
+}
